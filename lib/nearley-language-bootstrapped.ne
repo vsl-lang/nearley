@@ -1,5 +1,6 @@
 # nearley grammar
 @builtin "string.ne"
+@builtin "string.ne"
 
 final -> whit? prog whit? {% function(d) { return d[1]; } %}
 

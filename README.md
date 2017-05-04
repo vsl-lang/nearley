@@ -145,6 +145,10 @@ JSON-compatible strings).
 The following grammar matches a number, a plus sign, and another number:
 
     expression -> number "+" number
+    OR
+    expression -> number "+" number
+    OR
+    expression ===---===---> number "+" number
     
 Anything from a `#` to the end of a line is ignored as a comment:
 
@@ -293,8 +297,9 @@ You can pass a `lexer` instance to Parser, which must have the following interfa
 * `formatError(token)` -> return a string with an error message describing the line/col of the offending token. You might like to include a preview of the line in question.
 * `has(tokenType)` -> return true if the lexer can emit tokens with that name. Used to resolve `%`-specifiers in compiled `nearley` grammars.
 
-If Parser isn't given a lexer option, it will look for a `.lexer` attribute on its Grammar. The `@lexer` directive allows exporting a lexer object from your `.ne` grammar file. (See `json.ne` for an example.)
-
+If Parser isn't given a lexer option, it will look for a `.lexer` attribute on its Grammar. The `@lexer` directive allows exporting a lexer object from your `.ne` grammar file. (See `json.ne` for an example.)  
+If the result of `lexer#has` is guaranteed to be always `true` or always `false`, you can use the `@has` directive to simplify generated code.  
+If the lexer returns multiple-character tokens, you can use the `@split` directive with a value of `false` to prevent `nearley` from matching a list of single-character tokens that would normally be considered equivalent.
 
 ### Custom tokens
 
