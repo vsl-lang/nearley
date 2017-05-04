@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var nearley = require('../lib/nearley.js');
-var nomnom = require('nomnom');
-var Compile = require('../lib/compile.js');
-var StreamWrapper = require('../lib/stream.js');
-
-var opts = nomnom
+var fs = require('fs'),
+    nearley = require('../lib/nearley.js'),
+    nomnom = require('nomnom'),
+    Compile = require('../lib/compile.js'),
+    StreamWrapper = require('../lib/stream.js'),
+    opts = nomnom
     .script('nearleyc')
     .option('file', {
         position: 0,
@@ -34,15 +33,13 @@ var opts = nomnom
             return require('../package.json').version;
         }
     })
-    .parse();
-
-var input = opts.file ? fs.createReadStream(opts.file) : process.stdin;
-var output = opts.out ? fs.createWriteStream(opts.out) : process.stdout;
-
-var parserGrammar = require('../lib/nearley-language-bootstrapped.js');
-var parser = new nearley.Parser(parserGrammar.ParserRules, parserGrammar.ParserStart);
-var generate = require('../lib/generate.js');
-var lint = require('../lib/lint.js');
+    .parse(),
+    input = opts.file ? fs.createReadStream(opts.file) : process.stdin,
+    output = opts.out ? fs.createWriteStream(opts.out) : process.stdout,
+    parserGrammar = require('../lib/nearley-language-bootstrapped.js'),
+    parser = new nearley.Parser(parserGrammar.ParserRules, parserGrammar.Names),
+    generate = require('../lib/generate.js'),
+    lint = require('../lib/lint.js');
 
 input
     .pipe(new StreamWrapper(parser))

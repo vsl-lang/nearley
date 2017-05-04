@@ -1,6 +1,6 @@
 {
-  "name": "nearley",
-  "version": "2.8.0",
+  "name": "vsl-nearley",
+  "version": "2.9.0",
   "description": "Simple, fast, powerful parser toolkit for JavaScript.",
   "main": "lib/nearley.js",
   "dependencies": {
@@ -28,12 +28,12 @@
     "test": "mocha test/launch.js",
     "benchmark": "node test/benchmark.js"
   },
-  "author": "Hardmath123",
-  "contributors": "https://github.com/Hardmath123/nearley/graphs/contributors",
+  "author": "somebody1234",
+  "contributors": "https://github.com/vsl-lang/nearley/graphs/contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hardmath123/nearley.git"
+    "url": "https://github.com/vsl-lang/nearley.git"
   },
   "devDependencies": {
     "benchmark": "^2.1.3",

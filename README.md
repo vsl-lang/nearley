@@ -49,11 +49,11 @@ Simple parsing for node.js.
 
 What is nearley?
 ----------------
-nearley uses the Earley parsing algorithm augmented with Joop Leo's
-optimizations to parse complex data structures easily. nearley is über-fast and
+`nearley` uses the Earley parsing algorithm augmented with Joop Leo's
+optimizations to parse complex data structures easily. `nearley` is über-fast and
 really powerful. It can parse literally anything you throw at it.
 
-nearley is used by [artificial
+`nearley` is used by [artificial
 intelligence](https://github.com/ChalmersGU-AI-course/shrdlite-course-project)
 and [computational
 linguistics](https://wiki.eecs.yorku.ca/course_archive/2014-15/W/6339/useful_handouts)
@@ -66,16 +66,16 @@ pick](https://www.npmjs.com/package/npm-collection-staff-picks).
 Why do I care?
 --------------
 
-nearley can parse what other JS parse engines cannot, because it uses a
+`nearley` can parse what other JS parse engines cannot, because it uses a
 different algorithm. The Earley algorithm is *general*, which means it can
-handle *any* grammar you can define in BNF. In fact, the nearley syntax is
+handle *any* grammar you can define in BNF. In fact, the `nearley` syntax is
 written in *itself* (this is called bootstrapping).
 
 PEGjs and Jison are recursive-descent based, and so they will choke on a lot of
 grammars, in particular [left recursive
 ones](http://en.wikipedia.org/wiki/Left_recursion).
 
-nearley also has capabilities to catch errors gracefully, and detect ambiguous
+`nearley` also has capabilities to catch errors gracefully, and detect ambiguous
 grammars (grammars that can be parsed in multiple ways).
 
 Installation and Usage
@@ -83,7 +83,7 @@ Installation and Usage
 
 > **Note:** For beginners, Guillermo Webster's
 > [nearley-playground](https://omrelli.ug/nearley-playground/) is a wonderful
-> way to explore nearley interactively in your browser:
+> way to explore `nearley` interactively in your browser:
 >
 > ![A screenshot of the playground](www/playground.png)
 > 
@@ -94,13 +94,13 @@ types of installations are described separately below.
 
 ---
 
-To *compile* a nearley parser (a `.ne` file), you need to install the
+To *compile* a `nearley` parser (a `.ne` file), you need to install the
 `nearleyc` command from npm:
 
     $ npm install -g nearley
     $ nearleyc parser.ne
 
-nearley ships with three additional tools:
+`nearley` ships with three additional tools:
 - `nearley-test` lets you quickly test a grammar against some input and see the
   results. It also lets you explore the internal state of nearley's Earley
   table, in case you find that interesting.
@@ -109,7 +109,7 @@ nearley ships with three additional tools:
 - `nearley-railroad` generates pretty railroad diagrams from your parser. This
   is mainly helpful for creating documentation, as (for example) on json.org.
 
-You can uninstall the nearley compiler using `npm uninstall -g nearley`.
+You can uninstall the `nearley` compiler using `npm uninstall -g nearley`.
 
 ---
 
@@ -118,7 +118,7 @@ dependency via npm (note that there is no `-g` in the first command):
 
     $ npm install nearley
     $ node
-    > var nearley = require("nearley");
+    > var `nearley = require("nearley");
     > var grammar = require("./my-generated-grammar.js");
 
 Alternatively, to use a generated grammar in a browser runtime, include the
@@ -131,7 +131,7 @@ Alternatively, to use a generated grammar in a browser runtime, include the
 Parser specification
 --------------------
 
-This is a basic overview of nearley syntax and usage. For an advanced
+This is a basic overview of `nearley` syntax and usage. For an advanced
 styleguide, see [this file](how-to-grammar-good.md).
 
 A parser consists of several *nonterminals*, which are constructions in a
@@ -223,7 +223,7 @@ The `.` character can be used to represent "any character".
 
 ### EBNF
 
-nearley compiles some higher-level constructs into BNF for you. In particular,
+`nearley` compiles some higher-level constructs into BNF for you. In particular,
 the `*`, `?`, and `+` operators from Regexes (or EBNF) are available as shown:
 
     batman -> "na":* "batman" # nananana...nanabatman
@@ -289,19 +289,19 @@ You can pass a `lexer` instance to Parser, which must have the following interfa
 
 * `reset(chunk, Info)`: set the internal buffer to `chunk`, and restore line/col/state info taken from `save()`.
 * `next() -> Token` return e.g. `{type, value, line, col, …}`. Only the `value` attribute is required.
-* `save() -> Info` -> return an object describing the current line/col etc. This allows us to preserve this information between `feed()` calls, and also to support `Parser#rewind()`. The exact structure is lexer-specific; nearley doesn't care what's in it.
+* `save() -> Info` -> return an object describing the current line/col etc. This allows us to preserve this information between `feed()` calls, and also to support `Parser#rewind()`. The exact structure is lexer-specific; `nearley` doesn't care what's in it.
 * `formatError(token)` -> return a string with an error message describing the line/col of the offending token. You might like to include a preview of the line in question.
-* `has(tokenType)` -> return true if the lexer can emit tokens with that name. Used to resolve `%`-specifiers in compiled nearley grammars.
+* `has(tokenType)` -> return true if the lexer can emit tokens with that name. Used to resolve `%`-specifiers in compiled `nearley` grammars.
 
 If Parser isn't given a lexer option, it will look for a `.lexer` attribute on its Grammar. The `@lexer` directive allows exporting a lexer object from your `.ne` grammar file. (See `json.ne` for an example.)
 
 
 ### Custom tokens
 
-Nearley assumes by default that your fundamental unit of parsing, called a
+`nearley` assumes by default that your fundamental unit of parsing, called a
 *token*, is a character. That is, you're parsing a list of characters. However,
 sometimes you want to preprocess your string to turn it into a list of *lexical
-tokens*. This means, instead of seeing "1", "2", "3", the nearley might just
+tokens*. This means, instead of seeing "1", "2", "3", the `nearley` might just
 see a single list item "123". This is called *tokenizing*, and it can bring you
 decent performance gains. It also allows you to write cleaner, more
 maintainable grammars and to prevent ambiguous grammars.
@@ -331,10 +331,10 @@ accept it!)
 Using a parser
 --------------
 
-nearley exposes the following API:
+`nearley` exposes the following API:
 
     var grammar = require("generated-code.js");
-    var nearley = require("nearley");
+    var `nearley` = require("nearley");
 
     // Create a Parser object from our grammar.
     var p = new nearley.Parser(grammar.ParserRules, grammar.ParserStart);
@@ -362,7 +362,7 @@ complete block.
 The `nearley.Parser` constructor takes an optional third parameter, `options`,
 which is an object with the following possible keys:
 
-- `keepHistory` (boolean, default `false`): if set to `true`, nearley will
+- `keepHistory` (boolean, default `false`): if set to `true`, `nearley` will
   preserve the internal state of the parser in the parser's `.table` property.
   Preserving the state has some performance cost (because it can potentially be
   very large), so we recommend leaving this as `false` unless you are familiar
@@ -372,7 +372,7 @@ which is an object with the following possible keys:
 Catching errors
 ---------------
 
-If there are no possible parsings, nearley will throw an error whose `offset`
+If there are no possible parsings, `nearley` will throw an error whose `offset`
 property is the index of the offending token.
 
     try {
@@ -423,14 +423,14 @@ To limit the size of the output, you can specify a bound on the depth with the
 `-d` flag. This switches the Unparser to a different algorithm. A larger depth
 bound corresponds to larger generated strings.
 
-As far as I know, nearley is the only parser generator with this feature. It
+As far as I know, `nearley` is the only parser generator with this feature. It
 is inspired by Roly Fentanes' [randexp](https://fent.github.io/randexp.js/),
 which does the same thing with regular expressions.
 
 Automagical Railroad Diagrams
 -----------------------------
 
-nearley lets you convert your grammars to pretty SVG railroad diagrams that you
+`nearley` lets you convert your grammars to pretty SVG railroad diagrams that you
 can include in webpages, documentation, and even papers.
 
 ```
@@ -448,14 +448,14 @@ tabatkins.)
 Other Tools
 -----------
 
-*This section lists nearley tooling created by other developers. These tools
+*This section lists `nearley` tooling created by other developers. These tools
 are not distributed with nearley, so if you have problems, please contact the
 respective author for support instead of opening an issue with nearley.*
 
-Atom users can write nearley grammars with [this
+Atom users can write `nearley` grammars with [this
 plugin](https://github.com/bojidar-bg/nearley-grammar) by Bojidar Marinov.
 
-Sublime Text users can write nearley grammars with [this
+Sublime Text users can write `nearley` grammars with [this
 syntax](https://github.com/liam4/nearley-syntax-sublime) by liam4.
 
 Vim users can use [this plugin](https://github.com/andres-arana/vim-nearley) by
@@ -464,13 +464,13 @@ Andrés Arana.
 Visual Studio Code users can use [this
 extension](https://github.com/karyfoundation/nearley-vscode) by Pouya Kary.
 
-Python users can convert nearley grammars to Python using
+Python users can convert `nearley` grammars to Python using
 [lark](https://github.com/erezsh/lark#how-to-use-nearley-grammars-in-lark) by
 Erez.
 
 Browser users can use
 [nearley-playground](https://omrelli.ug/nearley-playground/) by Guillermo
-Webster to explore nearley interactively in the browser. There is also a [Mac
+Webster to explore `nearley` interactively in the browser. There is also a [Mac
 app](https://github.com/pmkary/nearley-playground-mac) by Pouya Kary.
 
 Webpack users can use
@@ -501,12 +501,12 @@ make me happy:
 - Help build the builtins library by PRing in your favorite primitives.
 - Solutions to issues labeled "up for grabs" on the issue tracker.
 
-Nearley is MIT licensed.
+`nearley` is MIT licensed.
 
 A big thanks to Nathan Dinsmore for teaching me how to Earley, Aria Stewart for
-helping structure nearley into a mature module, and Robin Windels for
+helping structure `nearley` into a mature module, and Robin Windels for
 bootstrapping the grammar. Additionally, Jacob Edelman wrote an experimental
-JavaScript parser with nearley and contributed ideas for EBNF support. Joshua
+JavaScript parser with `nearley` and contributed ideas for EBNF support. Joshua
 T. Corbin refactored the compiler to be much, much prettier. Bojidar Marinov
 implemented postprocessors-in-other-languages. Shachar Itzhaky fixed a subtle
 bug with nullables.
@@ -518,6 +518,6 @@ Further reading
   about the algorithm. 
 - Read about [Marpa](http://savage.net.au/Marpa.html) to
   learn more than you ever thought you wanted to know about parsing.
-- A [nearley
-  tutorial](https://medium.com/@gajus/parsing-absolutely-anything-in-javascript-using-earley-algorithm-886edcc31e5e)
-  written by @gajus.
+- A [nearley tutorial](
+    https://medium.com/@gajus/parsing-absolutely-anything-in-javascript-using-earley-algorithm-886edcc31e5e
+  ) written by @gajus.

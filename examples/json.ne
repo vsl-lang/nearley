@@ -1,10 +1,8 @@
 # http://www.json.org/
 # http://www.asciitable.com/
 @{%
-
-const moo = require('moo')
-
-let lexer = moo.compile({
+var moo = require('moo'),
+    lexer = moo.compile({
     space: {match: /\s+/, lineBreaks: true},
     number: /-?(?:[0-9]|[1-9][0-9]+)(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?\b/,
     string: /"(?:\\["bfnrt\/\\]|\\u[a-fA-F0-9]{4}|[^"\\])*"/,
@@ -17,7 +15,7 @@ let lexer = moo.compile({
     true: 'true',
     false: 'false',
     null: 'null',
-})
+});
 
 // TODO add has() to moo
 lexer.has = function(name) {
@@ -25,7 +23,6 @@ lexer.has = function(name) {
     return group.tokenType === name;
   });
 }
-
 %}
 
 @lexer lexer
@@ -64,11 +61,11 @@ function extractPair(kv, output) {
 }
 
 function extractObject(d) {
-    let output = {};
+    var output = {};
 
     extractPair(d[2], output);
 
-    for (let i in d[3]) {
+    for (var i in d[3]) {
         extractPair(d[3][i][3], output);
     }
 
@@ -76,9 +73,9 @@ function extractObject(d) {
 }
 
 function extractArray(d) {
-    let output = [d[2]];
+    var output = [d[2]];
 
-    for (let i in d[3]) {
+    for (var i in d[3]) {
         output.push(d[3][i][3]);
     }
 
