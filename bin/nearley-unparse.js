@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var nearley = require('../lib/nearley.js');
-var nomnom = require('nomnom');
-var randexp = require('randexp');
-
-var opts = nomnom
+var fs = require('fs'),
+    nomnom = require('nomnom'),
+    randexp = require('randexp'),
+    opts = nomnom
     .script('nearley-unparse')
     .option('file', {
         position: 0,
@@ -38,42 +36,35 @@ var opts = nomnom
             return require('../package.json').version;
         }
     })
-    .parse();
-
-var output = opts.out ? fs.createWriteStream(opts.out) : process.stdout;
-
-var grammar = new require(require('path').resolve(opts.file));
+    .parse(),
+    output = opts.out ? fs.createWriteStream(opts.out) : process.stdout,
+    grammar = require(require('path').resolve(opts.file));
 
 function gen(grammar, name) {
     // The first-generation generator. It just spews out stuff randomly, and is
     // not at all guaranteed to terminate. However, it is extremely performant.
 
     var stack = [name];
-    var rules = grammar.ParserRules;
 
     while (stack.length > 0) {
         var currentname = stack.pop();
-        if (typeof(currentname) === 'string') {
-            var goodrules = grammar.ParserRules.filter(function(x) {
-                return x.name === currentname;
-            });
+        if (typeof currentname === "number") {
+            var goodrules = grammar.ParserRules[currentname];
             if (goodrules.length > 0) {
                 var chosen = goodrules[
-                    Math.floor(Math.random()*goodrules.length)
+                    Math.floor(Math.random() * goodrules.length)
                 ];
-                for (var i=chosen.symbols.length-1; i>=0; i--) {
+                for (var i = chosen.symbols.length - 1; i >= 0; i--) {
                     stack.push(chosen.symbols[i]);
                 }
             } else {
-                throw new Error("Nothing matches rule: "+currentname+"!");
+                throw new Error("Nothing matches rule: " + currentname + "!");
             }
         } else if (currentname.test) {
-            var c = new randexp(currentname).gen();
-            output.write(c);
+            output.write(new randexp(currentname).gen());
             continue;
         } else if (currentname.literal) {
-            var c = currentname.literal;
-            output.write(c);
+            output.write(currentname.literal);
             continue;
         }
     }
@@ -86,13 +77,14 @@ function gen2(grammar, name, depth) {
     // that's doable if we *really* need it (by converting min_depth_rule, a
     // predicate, into something that counts the number of trees of depth d).
 
-    var rules = grammar.ParserRules;
-    var min_depths_rule = [];
+    var rules = grammar.ParserRules,
+        min_depths_rule = [];
 
     function synth_nt(name, depth) {
-        var good_rules = [];
-        var min_min_depth = Infinity;
-        for (var i=0; i<rules.length; i++) {
+        //TODO: change to use exp since name doesn't exist anymore
+        var good_rules = [],
+            min_min_depth = Infinity;
+        for (var i = 0; i < rules.length; i++) {
             min_depths_rule = [];
             var size = min_depth_rule(i, []);
             if (rules[i].name === name) {
@@ -103,9 +95,9 @@ function gen2(grammar, name, depth) {
             }
         }
         if (good_rules.length === 0) {
-            throw ("No strings in your grammar have depth "+depth+" (and " +
-                   "none are shallower). Try increasing -d to at least "+
-                   (min_min_depth+1) + ".");
+            throw ("No strings in your grammar have depth " + depth + " (and " +
+                   "none are shallower). Try increasing -d to at least " +
+                   (min_min_depth + 1) + ".");
         }
 
         var r = good_rules[Math.floor(Math.random()*good_rules.length)];
@@ -113,10 +105,10 @@ function gen2(grammar, name, depth) {
     }
     function synth_rule(idx, depth) {
         var ret = "";
-        for (var i=0; i<rules[idx].symbols.length; i++) {
+        for (var i = 0; i < rules[idx].symbols.length; i++) {
             var tok = rules[idx].symbols[i];
-            if (typeof(tok) === 'string') {
-                ret += synth_nt(tok, depth-1);
+            if (typeof tok === "number") {
+                ret += synth_nt(tok, depth - 1);
             } else if (tok.test) {
                 ret += new randexp(tok).gen();
             } else if (tok.literal) {
@@ -130,7 +122,7 @@ function gen2(grammar, name, depth) {
             return +Infinity;
         }
         var d = +Infinity;
-        for (var i=0; i<rules.length; i++) {
+        for (var i = 0; i < rules.length; i++) {
             if (rules[i].name === name) {
                 d = Math.min(d, min_depth_rule(i, [name].concat(visited)));
             }
@@ -138,13 +130,15 @@ function gen2(grammar, name, depth) {
         return d;
     }
     function min_depth_rule(idx, visited) {
-        if (min_depths_rule[idx] !== undefined) return min_depths_rule[idx];
+        if (min_depths_rule[idx] !== undefined) {
+            return min_depths_rule[idx];
+        }
 
         var d = 1;
-        for (var i=0; i<rules[idx].symbols.length; i++) {
+        for (var i = 0; i < rules[idx].symbols.length; i++) {
             var tok = rules[idx].symbols[i];
-            if (typeof(tok) === 'string') {
-                d = Math.max(d, 1+min_depth_nt(tok, visited));
+            if (typeof(tok) === "string") {
+                d = Math.max(d, 1 + min_depth_nt(tok, visited));
             }
         }
         min_depths_rule[idx] = d;
@@ -158,11 +152,13 @@ function gen2(grammar, name, depth) {
 
 
 // the main loop
-for (var i=0; i<parseInt(opts.count); i++) {
+for (var i = 0; i < parseInt(opts.count, 10); i++) {
     if (opts.depth === -1) {
-        gen(grammar, opts.start ? opts.start : grammar.ParserStart);
+        gen(grammar, opts.start ? opts.start : 0);
     } else {
-        output.write(gen2(grammar, opts.start ? opts.start : grammar.ParserStart, opts.depth));
+        output.write(gen2(grammar, opts.start ? opts.start : 0, opts.depth));
     }
-    if (opts.count > 1) output.write("\n");
+    if (opts.count > 1) {
+        output.write("\n");
+    }
 }

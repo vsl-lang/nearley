@@ -73,13 +73,10 @@ function railroad(grm) {
                 switch (tok.modifier) {
                 case ":+":
                     return new rr.OneOrMore(renderTok(tok.ebnf));
-                    break;
                 case ":*":
                     return new rr.ZeroOrMore(renderTok(tok.ebnf));
-                    break;
                 case ":?":
                     return new rr.Optional(renderTok(tok.ebnf));
-                    break;
                 }
             } else if (tok.literal) {
                 return new rr.Terminal(JSON.stringify(tok.literal));
@@ -117,10 +114,10 @@ function railroad(grm) {
     ].join('\n');
 }
 
-var nearley = require('../lib/nearley.js');
-var StreamWrapper = require('../lib/stream.js');
-var parserGrammar = new require('../lib/nearley-language-bootstrapped.js');
-var parser = new nearley.Parser(parserGrammar.ParserRules, parserGrammar.ParserStart);
+var nearley = require('../lib/nearley.js'),
+    StreamWrapper = require('../lib/stream.js'),
+    parserGrammar = require('../lib/nearley-language-bootstrapped.js'),
+    parser = new nearley.Parser(parserGrammar.ParserRules, parserGrammar.Name);
 input
     .pipe(new StreamWrapper(parser))
     .on('finish', function() {
