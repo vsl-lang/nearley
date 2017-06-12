@@ -1,6 +1,6 @@
 {
   "name": "vsl-nearley",
-  "version": "2.9.3",
+  "version": "2.9.5",
   "description": "Simple, fast, powerful parser toolkit for JavaScript.",
   "main": "lib/nearley.js",
   "dependencies": {
